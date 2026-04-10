@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { 
   Cloud, 
   UserPlus, 
@@ -27,7 +27,9 @@ import {
   RefreshCw,
   BarChart3,
   FileText,
-  Workflow
+  Workflow,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { motion, useScroll, useSpring, useTransform, AnimatePresence } from 'motion/react';
 
@@ -79,24 +81,10 @@ const StepItem = ({ number, title, content }: { number: string, title: string, c
   </div>
 );
 
-const SimpleLogo = () => {
-  return (
-    <div className="py-12 mb-8 flex justify-center">
-      <div className="relative group flex items-center gap-3 font-sans">
-        <span className="text-blue-500/60 text-xl md:text-2xl font-mono">&lt;&gt;</span>
-        <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-          Asif_Maner_027
-        </h1>
-        <span className="text-blue-500/60 text-xl md:text-2xl font-mono">&lt;/&gt;</span>
-        <div className="absolute -bottom-3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-in-out" />
-      </div>
-    </div>
-  );
-};
-
 // --- Main App ---
 
 export default function App() {
+  const [isDark, setIsDark] = useState(true);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -104,8 +92,16 @@ export default function App() {
     restDelta: 0.001
   });
 
+  useEffect(() => {
+    if (isDark) {
+      document.body.classList.remove('light');
+    } else {
+      document.body.classList.add('light');
+    }
+  }, [isDark]);
+
   return (
-    <div className="bg-slate-950 text-slate-200 selection:bg-orange-500/30 font-sans">
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-slate-950 text-slate-200' : 'bg-slate-50 text-slate-900'}`}>
       {/* Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-orange-500 z-[100] origin-left"
@@ -127,16 +123,39 @@ export default function App() {
             <a href="#storage" className="hover:text-white transition-colors">Storage</a>
             <a href="#deploy" className="hover:text-white transition-colors">Deploy</a>
             <a href="#advanced" className="hover:text-white transition-colors">Advanced</a>
+            <a 
+              href="https://assii27.github.io/Asif_Portfolio/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20 hover:bg-blue-500/20 transition-all font-bold"
+            >
+              Asif Maner
+            </a>
+            <a 
+              href="https://assii27.github.io/ProjectDeployProcess/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="px-3 py-1 bg-orange-500/10 text-orange-400 rounded-md border border-orange-500/20 hover:bg-orange-500/20 transition-all font-bold"
+            >
+              Technical Knowledge
+            </a>
           </div>
-          <button className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-lg transition-all shadow-lg shadow-blue-900/20">
-            Get Started
-          </button>
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsDark(!isDark)}
+              className="p-2 rounded-lg hover:bg-slate-800 transition-colors border border-slate-800"
+            >
+              {isDark ? <Sun className="w-5 h-5 text-orange-400" /> : <Moon className="w-5 h-5 text-blue-600" />}
+            </button>
+            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-lg transition-all shadow-lg shadow-blue-900/20">
+              Get Started
+            </button>
+          </div>
         </div>
       </nav>
 
       {/* 🟢 Scene 1: Introduction */}
       <Section className="text-center">
-        <SimpleLogo />
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -663,13 +682,16 @@ export default function App() {
       </Section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-slate-800 text-center">
+      <footer className="py-12 border-t border-slate-800 text-center relative z-10">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Cloud className="w-6 h-6 text-orange-500" />
           <span className="font-bold text-lg">AWS Masterclass</span>
         </div>
         <p className="text-slate-500 text-sm">
           Designed for developers, by developers. © 2026 AWS Learning Path.
+        </p>
+        <p className="text-blue-500 font-bold mt-2">
+          Created by Asif Maner
         </p>
       </footer>
     </div>
